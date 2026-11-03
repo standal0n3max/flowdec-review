@@ -1,0 +1,66 @@
+[
+  {
+    "clip": "speech_speech_0",
+    "nfe": 2,
+    "bitrate": 7.5,
+    "si_sdr": 11.107141466803164,
+    "fwssnr": 12.532665296391748,
+    "logspec_mse": 388.1332702636719
+  },
+  {
+    "clip": "speech_speech_0",
+    "nfe": 4,
+    "bitrate": 7.5,
+    "si_sdr": 10.573446237118585,
+    "fwssnr": 16.260438991087717,
+    "logspec_mse": 162.4747772216797
+  },
+  {
+    "clip": "speech_speech_0",
+    "nfe": 6,
+    "bitrate": 7.5,
+    "si_sdr": 10.252719469064438,
+    "fwssnr": 16.730612095206155,
+    "logspec_mse": 156.13963317871094
+  },
+  {
+    "clip": "speech_speech_0",
+    "nfe": 50,
+    "bitrate": 7.5,
+    "si_sdr": 10.124941270323994,
+    "fwssnr": 16.826303957206196,
+    "logspec_mse": 154.44285583496094
+  },
+  {
+    "clip": "music_music_0",
+    "nfe": 2,
+    "bitrate": 7.5,
+    "si_sdr": 14.93784099137585,
+    "fwssnr": 16.83262803627551,
+    "logspec_mse": 471.3305358886719
+  },
+  {
+    "clip": "music_music_0",
+    "nfe": 4,
+    "bitrate": 7.5,
+    "si_sdr": 15.148330325730019,
+    "fwssnr": 19.955932028906343,
+    "logspec_mse": 88.58842468261719
+  },
+  {
+    "clip": "music_music_0",
+    "nfe": 6,
+    "bitrate": 7.5,
+    "si_sdr": 14.860360222871558,
+    "fwssnr": 20.31329809754165,
+    "logspec_mse": 74.15911865234375
+  },
+  {
+    "clip": "music_music_0",
+    "nfe": 50,
+    "bitrate": 7.5,
+    "si_sdr": 14.660155660517537,
+    "fwssnr": 20.36450578765051,
+    "logspec_mse": 68.62794494628906
+  }
+]

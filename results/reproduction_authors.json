@@ -1,0 +1,98 @@
+[
+  {
+    "clip": "Music_Licensed_1",
+    "method": "authors_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 7.703583479667725,
+    "fwssnr": 15.746132696913094,
+    "logspec_mse": 448.46917724609375
+  },
+  {
+    "clip": "Music_Licensed_1",
+    "method": "authors_dac75",
+    "bitrate": 7.5,
+    "si_sdr": 10.444335191237375,
+    "fwssnr": 16.256758781641445,
+    "logspec_mse": 119.34516906738281
+  },
+  {
+    "clip": "Music_Licensed_1",
+    "method": "ours_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 7.596225547295131,
+    "fwssnr": 15.961635819857891,
+    "logspec_mse": 564.8775634765625
+  },
+  {
+    "clip": "Music_Licensed_1",
+    "method": "ours_ndac",
+    "bitrate": 7.5,
+    "si_sdr": 9.175758617002,
+    "fwssnr": 18.729382489631703,
+    "logspec_mse": 118.42185974121094
+  },
+  {
+    "clip": "Speech_EARS_1",
+    "method": "authors_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 8.599554620422907,
+    "fwssnr": 15.204556524822543,
+    "logspec_mse": 103.4493179321289
+  },
+  {
+    "clip": "Speech_EARS_1",
+    "method": "authors_dac75",
+    "bitrate": 7.5,
+    "si_sdr": 11.163234787276608,
+    "fwssnr": 16.565409744638863,
+    "logspec_mse": 89.14697265625
+  },
+  {
+    "clip": "Speech_EARS_1",
+    "method": "ours_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 8.873894853644678,
+    "fwssnr": 15.379331789405658,
+    "logspec_mse": 99.1929931640625
+  },
+  {
+    "clip": "Speech_EARS_1",
+    "method": "ours_ndac",
+    "bitrate": 7.5,
+    "si_sdr": 10.039517591876972,
+    "fwssnr": 18.045909211384597,
+    "logspec_mse": 62.809993743896484
+  },
+  {
+    "clip": "Sound_AudioSet_1",
+    "method": "authors_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 0.9211037514317106,
+    "fwssnr": 15.569250711592215,
+    "logspec_mse": 91.4883041381836
+  },
+  {
+    "clip": "Sound_AudioSet_1",
+    "method": "authors_dac75",
+    "bitrate": 7.5,
+    "si_sdr": 4.994232661842365,
+    "fwssnr": 16.00890458576623,
+    "logspec_mse": 128.0155029296875
+  },
+  {
+    "clip": "Sound_AudioSet_1",
+    "method": "ours_flowdec",
+    "bitrate": 7.5,
+    "si_sdr": 0.6487004405610787,
+    "fwssnr": 15.204451363069598,
+    "logspec_mse": 100.81891632080078
+  },
+  {
+    "clip": "Sound_AudioSet_1",
+    "method": "ours_ndac",
+    "bitrate": 7.5,
+    "si_sdr": 2.505550076256635,
+    "fwssnr": 17.14663870408361,
+    "logspec_mse": 113.09919738769531
+  }
+]

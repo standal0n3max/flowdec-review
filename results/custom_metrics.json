@@ -1,0 +1,482 @@
+[
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 10.492285911026498,
+    "fwssnr": 16.62875642083197,
+    "logspec_mse": 156.65821838378906
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 9.008167499197368,
+    "fwssnr": 14.381573006969074,
+    "logspec_mse": 156.8388214111328
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 7.771783440371013,
+    "fwssnr": 12.725820857032783,
+    "logspec_mse": 159.56460571289062
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 11.764837171789189,
+    "fwssnr": 19.345836613856196,
+    "logspec_mse": 80.92465209960938
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -11.290313596545849,
+    "fwssnr": 2.319313489741923,
+    "logspec_mse": 749.5341796875
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": 0.3598169654674348,
+    "fwssnr": 4.790087770504182,
+    "logspec_mse": 736.0343627929688
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": 6.152432773611327,
+    "fwssnr": 11.450218648655646,
+    "logspec_mse": 666.7442016601562
+  },
+  {
+    "clip": "speech_speech_0",
+    "category": "speech",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -27.161496492051235,
+    "fwssnr": 4.972380688916896,
+    "logspec_mse": 422.5333557128906
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 11.029791378864731,
+    "fwssnr": 16.392812024918374,
+    "logspec_mse": 145.8260040283203
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 9.247652903032082,
+    "fwssnr": 13.692111269623386,
+    "logspec_mse": 151.40374755859375
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 7.748867892371775,
+    "fwssnr": 12.201923389782074,
+    "logspec_mse": 149.78297424316406
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 12.382962964948463,
+    "fwssnr": 18.82229528256558,
+    "logspec_mse": 82.94254302978516
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -12.771303209805797,
+    "fwssnr": 1.8207361049574224,
+    "logspec_mse": 754.5313720703125
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": 0.22761887368767075,
+    "fwssnr": 4.345514041539936,
+    "logspec_mse": 737.7489624023438
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": 6.766040259551778,
+    "fwssnr": 10.801916718419156,
+    "logspec_mse": 670.172119140625
+  },
+  {
+    "clip": "speech_speech_1",
+    "category": "speech",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -27.230441046106186,
+    "fwssnr": 4.747233773627175,
+    "logspec_mse": 446.2315979003906
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 14.56417088988248,
+    "fwssnr": 20.04028549566259,
+    "logspec_mse": 97.24661254882812
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 11.839710921493925,
+    "fwssnr": 16.93284534301774,
+    "logspec_mse": 105.01189422607422
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 9.8331611276795,
+    "fwssnr": 13.903628455998364,
+    "logspec_mse": 106.60826873779297
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 16.517027104614577,
+    "fwssnr": 22.044355685102424,
+    "logspec_mse": 57.6691780090332
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -20.481740521448927,
+    "fwssnr": 2.5915892339309106,
+    "logspec_mse": 2195.085693359375
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": 0.05118925909371816,
+    "fwssnr": 6.603889987657818,
+    "logspec_mse": 2297.13623046875
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": 2.3314728387201273,
+    "fwssnr": 7.794245751433332,
+    "logspec_mse": 2274.23583984375
+  },
+  {
+    "clip": "music_music_0",
+    "category": "music",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -45.37606753683299,
+    "fwssnr": 2.6370518431558296,
+    "logspec_mse": 172.0074005126953
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 14.597458693403711,
+    "fwssnr": 20.345903476477535,
+    "logspec_mse": 82.84017944335938
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 12.61766447259943,
+    "fwssnr": 17.706515491335626,
+    "logspec_mse": 81.5295639038086
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 10.145333211727582,
+    "fwssnr": 15.145776830529263,
+    "logspec_mse": 82.66075134277344
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 16.398113584948813,
+    "fwssnr": 22.4208102067423,
+    "logspec_mse": 55.25311279296875
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -22.940510545951987,
+    "fwssnr": 4.141124737792077,
+    "logspec_mse": 2068.660888671875
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": -0.01134909183344208,
+    "fwssnr": 7.882953457767034,
+    "logspec_mse": 2376.750732421875
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": 2.7110245267673627,
+    "fwssnr": 9.08528488276938,
+    "logspec_mse": 2373.3623046875
+  },
+  {
+    "clip": "music_music_1",
+    "category": "music",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -54.401072196765945,
+    "fwssnr": 3.78061362990846,
+    "logspec_mse": 185.35581970214844
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 17.562756899369386,
+    "fwssnr": 16.21488442866901,
+    "logspec_mse": 110.3584213256836
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 14.419288623390681,
+    "fwssnr": 13.66074856489351,
+    "logspec_mse": 144.52371215820312
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 13.028589829762726,
+    "fwssnr": 12.510377763870851,
+    "logspec_mse": 184.26560974121094
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 20.7544737428268,
+    "fwssnr": 18.5946762057392,
+    "logspec_mse": 57.60706329345703
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -15.778412858621312,
+    "fwssnr": -0.9432076247220414,
+    "logspec_mse": 1665.3951416015625
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": -13.870499071246176,
+    "fwssnr": 0.23151544708738203,
+    "logspec_mse": 1655.6422119140625
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": -13.423412574907728,
+    "fwssnr": 1.0289648605599675,
+    "logspec_mse": 1590.463623046875
+  },
+  {
+    "clip": "ambient_ambient_0",
+    "category": "ambient",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -48.45979904590009,
+    "fwssnr": -0.9630120125270751,
+    "logspec_mse": 137.8147430419922
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 6,
+    "si_sdr": 22.541573117635064,
+    "fwssnr": 16.719850015301073,
+    "logspec_mse": 161.26785278320312
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 4.5,
+    "nq": 6,
+    "nfe": 6,
+    "si_sdr": 19.39066458673186,
+    "fwssnr": 14.4132825940986,
+    "logspec_mse": 162.6009521484375
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "flowdec",
+    "bitrate": 3.0,
+    "nq": 4,
+    "nfe": 6,
+    "si_sdr": 17.01949820337041,
+    "fwssnr": 13.355760096152615,
+    "logspec_mse": 165.34141540527344
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "ndac",
+    "bitrate": 7.5,
+    "nq": 10,
+    "nfe": 0,
+    "si_sdr": 27.21896749120553,
+    "fwssnr": 18.733510861255702,
+    "logspec_mse": 63.83582305908203
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 3.0,
+    "si_sdr": -20.649218622249258,
+    "fwssnr": -3.186525737167428,
+    "logspec_mse": 1050.4217529296875
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 4.5,
+    "si_sdr": -19.270561602285248,
+    "fwssnr": -2.0955250775560015,
+    "logspec_mse": 1048.3016357421875
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "opus",
+    "bitrate": 7.5,
+    "si_sdr": -16.9918750228436,
+    "fwssnr": -1.2756012217961865,
+    "logspec_mse": 1005.3921508789062
+  },
+  {
+    "clip": "ambient_ambient_1",
+    "category": "ambient",
+    "method": "griffin_lim",
+    "bitrate": 7.68,
+    "si_sdr": -49.039651498067656,
+    "fwssnr": -2.7674112039886962,
+    "logspec_mse": 156.72059631347656
+  }
+]

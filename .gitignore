@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.mypy_cache/
+.pyright/
+.ipynb_checkpoints/
+
+# Project artifacts / heavy files
+paper/checkpoints/
+paper/checkpoints.zip
+paper/*.pdf
+paper/flowdec.txt
+code/FlowDec/
+data/custom/raw/
+results/demo/
+results/*.pt
+results/cache/
+results/*.log
+
+# macOS
+.DS_Store
+
+# copyrighted / course material (kept locally, not published)
+paper/*.txt
+data/authors/
+Course project assignment AMLT 2026.pdf
