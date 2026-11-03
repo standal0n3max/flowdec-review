@@ -41,6 +41,8 @@ dependencies = [
     "setuptools==69.5.1",
     "speechmos==0.0.1.1",
     "ninja==1.11.1.1",
+    "python-pptx==1.0.2",
+    "pygments==2.21.0",
 ]
 
 [project.optional-dependencies]
@@ -56,9 +58,10 @@ typeCheckingMode = "strict"
 pythonVersion = "3.10"
 reportMissingImports = "warning"
 # Third-party deps used here ship no type stubs (torchaudio, dac, pysepm,
-# laion_clap, scipy, matplotlib, nbformat). Strict mode's unknown-type rules
-# cannot be satisfied without hand-written stubs, so they are relaxed; all
-# substantive type checks (arg/return types, operators, attributes) stay on.
+# laion_clap, scipy, matplotlib, nbformat, python-pptx). Strict mode's
+# unknown-type rules cannot be satisfied without hand-written stubs, so they are
+# relaxed; all substantive type checks (arg/return types, operators, attributes)
+# stay on.
 reportMissingTypeStubs = false
 reportUnknownMemberType = false
 reportUnknownVariableType = false

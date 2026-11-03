@@ -39,6 +39,10 @@ CP/
 │   ├── patch_flowdec_mps.py      # makes the backbone importable on MPS/CPU
 │   ├── build_notebook.py         # renders notebooks/flowdec_demo.ipynb
 │   ├── fill_report.py            # injects result tables into report/slides
+│   ├── slides_content.py         # single source of truth for the presentation deck
+│   ├── build_slide_assets.py     # equations, pipeline diagram, code cells, audio clips
+│   ├── build_slides_html.py      # renders report/flowdec_slides.html
+│   ├── build_slides_pptx.py      # renders report/flowdec_slides.pptx
 │   ├── diagnose_mps.py           # reproduction + CPU/MPS cross-check
 │   └── run_experiments.py        # main driver (reproduce / custom / nfe stages)
 ├── data/
@@ -50,7 +54,10 @@ CP/
 ├── results/                      # metrics JSON, plots, demo WAVs
 └── report/
     ├── report.md                 # written report (EN)
-    └── slides.md                 # presentation source (Marp/Markdown)
+    ├── slides.md                 # talk outline (Marp/Markdown)
+    ├── flowdec_slides.html       # generated: self-contained interactive deck (EN)
+    ├── flowdec_slides.pptx       # generated: 16:9 slide deck for submission
+    └── assets/                   # generated: equations, diagram, code cells, audio
 ```
 
 ## One-time setup
@@ -98,7 +105,31 @@ Outputs land in `results/`: `custom_metrics.json`, `fad_custom.json`,
   roughly 10 dB and SI-SDR drops a few dB), consistent with bandwidth-limited half/float32
   matmuls. We therefore use CPU for all reported numbers and document MPS as a fast preview.
 
-See `report/report.md` for the full write-up and `report/slides.md` for the talk.
+See `report/report.md` for the full write-up and `report/slides.md` for the talk outline.
+
+## Presentation (10 min + 5 min Q&A)
+
+The deck has a single source of truth — `scripts/slides_content.py` — and two renderers, so
+the HTML deck and the `.pptx` can never drift apart. All numbers are pulled from
+`results/*.json` through the same aggregation helpers that fill `report/report.md`.
+
+```bash
+uv run python scripts/build_slide_assets.py   # equations, diagram, code cells, audio
+uv run python scripts/build_slides_html.py    # report/flowdec_slides.html
+uv run python scripts/build_slides_pptx.py    # report/flowdec_slides.pptx
+```
+
+- `report/flowdec_slides.html` — self-contained interactive deck (15 sections): sticky nav,
+  light/dark theme, **lecture mode** (arrow keys page through sections, `Esc` to exit) and
+  real `<audio>` A/B players. Open it in any browser; no server or network needed.
+- `report/flowdec_slides.pptx` — a real 16:9 PowerPoint with speaker notes. Because
+  `python-pptx` has no native audio shape, each listening clip is embedded as a short
+  **mp4** (waveform poster + sound) that plays on click in PowerPoint and LibreOffice.
+- Audio is **A/B against Opus at the same bitrate** (music, ambient, speech), all linked to
+  the committed mp3/mp4 assets in `report/assets/audio/`.
+
+Required assignment criteria are labelled on the relevant slides: novelty, reproduction on
+the authors' audio, comparison with classical baselines.
 
 ## Licensing
 
