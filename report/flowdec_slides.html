@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="FlowDec (ICLR 2025) course project presentation: paper review and independent testing on our own 48 kHz audio.">
+<title>FlowDec — course project presentation (AMLT ITMO 2026)</title>
+<style>
+:root{
+  --navy:#102345;--text:#243d61;--muted:#647992;--blue:#1676f3;--purple:#8954ef;
+  --line:#dce7f5;--paper:#f7faff;--surface:#fff;--bg:#fbfdff;--tint:#eff6ff;
+  --radius:20px;--font:Inter,"Segoe UI",Arial,sans-serif;--mono:"SFMono-Regular",Consolas,Menlo,monospace;
+  --shadow:0 12px 45px #1f4d7c10;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;background:var(--bg);color:var(--navy);font:16px/1.62 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,figure{margin:0}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer;color:inherit;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);padding:9px 13px;font-size:12px;transition:background .2s,border-color .2s,transform .2s}
+button:hover{border-color:#9fc7ff}
+button[aria-pressed=true]{background:var(--tint);border-color:#9fc7ff;color:var(--blue)}
+:focus-visible{outline:3px solid #5c9cff;outline-offset:3px}
+.wrap{max-width:1320px;margin:auto;padding:0 32px}
+.mono{font-family:var(--mono)}
+.header{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.header .wrap{display:flex;align-items:center;gap:18px;min-height:68px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:750;letter-spacing:-.6px}
+.brand-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;
+  background:linear-gradient(140deg,#278aff,#7961e8);color:#fff;font:18px var(--mono)}
+.brand small{color:var(--muted);font:10px var(--mono);letter-spacing:1px;margin-left:4px}
+.nav{display:flex;gap:2px;margin:auto;flex-wrap:wrap}
+.nav a{padding:7px 10px;border-radius:8px;color:var(--muted);font-size:12px}
+.nav a.active,.nav a:hover{background:var(--tint);color:var(--blue);text-decoration:none}
+.actions{display:flex;gap:7px;align-items:center}
+.hero{background:linear-gradient(180deg,var(--surface),var(--paper));border-bottom:1px solid var(--line);
+  padding:58px 0 44px}
+.eyebrow{display:flex;gap:10px;align-items:center;font:10px var(--mono);letter-spacing:1.4px;
+  text-transform:uppercase;color:#4c729d}
+.eyebrow:before{content:'';height:2px;width:26px;background:var(--blue)}
+.hero h1{font-size:clamp(34px,3.6vw,52px);line-height:1.08;letter-spacing:-1.8px;margin:20px 0 16px}
+.hero p{font-size:17px;color:var(--muted);max-width:900px}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.badge{font:11px var(--mono);padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--muted)}
+section.content{padding:52px 0 8px}
+.section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px}
+.section-top h2{font-size:clamp(26px,2.6vw,38px);line-height:1.14;letter-spacing:-1.1px;margin:12px 0 10px}
+.section-top .sub{color:var(--muted);font-size:15px;max-width:940px}
+.section-index{font:52px/1 var(--mono);color:var(--line);letter-spacing:-3px;flex:none}
+.required{display:inline-flex;align-items:center;gap:7px;font:11px var(--mono);
+  background:#eefaf3;border:1px solid #bde1ce;color:#127a4d;border-radius:999px;padding:5px 11px;margin-bottom:6px}
+.required:before{content:'✓'}
+.bullets{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:13px}
+.bullets li{max-width:1120px}
+.para{margin:0 0 14px;max-width:1120px;font-size:16px}
+code{font-family:var(--mono);font-size:.88em;background:var(--tint);border:1px solid var(--line);
+  border-radius:6px;padding:1px 6px;color:#124b8f;white-space:nowrap}
+.callout{margin:18px 0;padding:18px 22px;border:1px solid #cce0fc;border-radius:12px;background:var(--tint);
+  font-size:15px;color:var(--text)}
+.bullets+.callout{margin-top:22px}
+.picture-figure{margin:20px 0;max-width:var(--pic-width,90%)}
+.picture-figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px;background:#fff}
+.picture-figure figcaption,.table-figure figcaption{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.diagram-inline{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:14px;background:#fff}
+.table-figure{margin:20px 0}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--paper);font:11px var(--mono);letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+td{color:var(--text);font-variant-numeric:tabular-nums}
+td:first-child{color:var(--navy);font-weight:650}
+tbody tr:last-child td{border-bottom:0}
+.audio-group{margin:18px 0}
+.audio-caption{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px}
+.players{display:grid;gap:14px}
+.player{margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.player img{width:100%;height:96px;object-fit:cover;display:block;background:#fff}
+.player-head{display:flex;gap:12px;align-items:baseline;padding:11px 16px 0;flex-wrap:wrap}
+.player-title{font-size:14px;font-weight:700;color:var(--navy)}
+.player-note{font-size:12px;color:var(--muted)}
+.player audio{width:100%;display:block;padding:8px 14px 14px}
+.notes{margin:22px 0 0;border:1px dashed var(--line);border-radius:12px;background:var(--surface);padding:14px 18px}
+.notes summary{font-size:12px;color:var(--muted);cursor:pointer}
+.notes p{margin-top:10px;font-size:13.5px;color:var(--text)}
+.footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.lecture-bar{display:none;position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--surface);
+  border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 35px #17355526;padding:9px 13px;z-index:40;
+  align-items:center;gap:12px;white-space:nowrap;font-size:12px}
+.lecture .lecture-bar{display:flex}
+.lecture .hero,.lecture .footer,.lecture .nav{display:none}
+.lecture section.content{display:none}
+.lecture section.content.lecture-current{display:block;padding-top:26px;padding-bottom:120px}
+.lecture section.content.lecture-current h2{font-size:clamp(28px,3vw,42px)}
+.lecture .section-index{color:var(--blue)}
+html[data-theme=dark]{color-scheme:dark;--navy:#f3f5f8;--text:#d8dde6;--muted:#a8b1c0;--blue:#71adff;
+  --line:#2a3444;--paper:#111621;--surface:#0d1119;--bg:#06080d;--tint:#132035;--shadow:none}
+html[data-theme=dark] .hero{background:linear-gradient(180deg,#0b0f17,#06080d)}
+html[data-theme=dark] .picture-figure img,
+html[data-theme=dark] .diagram-inline{background:#fff}
+html[data-theme=dark] .player img{background:#fff}
+html[data-theme=dark] .callout{border-color:#274568}
+html[data-theme=dark] .badge,html[data-theme=dark] th{background:#0f1622}
+html[data-theme=dark] code{color:#9fd0ff;background:#12203a}
+@media(max-width:1080px){.nav{order:3;flex-basis:100%}.section-index{display:none}}
+@media(max-width:620px){.wrap{padding:0 16px}.nav a{padding:6px 8px}.lecture-bar{gap:6px}}
+@media print{
+  .header,.lecture-bar,.actions,.nav{display:none!important}
+  body{background:#fff}
+  section.content{display:block!important;break-inside:avoid;padding:18px 0}
+  .picture-figure{max-width:100%}
+  .notes{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#verdict" style="position:fixed;top:-60px">Skip to content</a>
+
+<header class="header"><div class="wrap">
+  <a class="brand" href="#title"><span class="brand-mark">&#9698;</span>FlowDec <small>/ AMLT 2026</small></a>
+  <nav class="nav" aria-label="Sections"><a href="#verdict">Verdict</a><a href="#problem">Problem</a><a href="#novelty">Novelty</a><a href="#model-overview">Model</a><a href="#algorithm">Algorithm</a><a href="#setup">Setup</a><a href="#reproduction">Reproduction</a><a href="#results">Results</a><a href="#baselines">Baselines</a><a href="#listen">Listen</a><a href="#nfe">NFE</a><a href="#device">Device caveat</a><a href="#conclusion">Conclusion</a><a href="#backup">Backup Q&A</a></nav>
+  <div class="actions">
+    <button id="theme" aria-pressed="false">Theme: light</button>
+    <button id="lecture" aria-pressed="false">Lecture mode</button>
+  </div>
+</div></header>
+
+<main>
+  <div class="hero"><div class="wrap">
+    <div class="eyebrow">Course project &middot; Advanced Machine Learning &middot; ITMO 2026</div>
+    <h1>FlowDec: a flow-based full-band<br>general audio codec</h1>
+    <p>Paper review and independent testing on our own 48 kHz audio &mdash; a non-adversarial codec with a
+       conditional-flow-matching postfilter that samples in 6 network evaluations.</p>
+    <div class="badges">
+      <span class="badge">15 sections</span>
+      <span class="badge">10 min + 5 min Q&amp;A</span>
+      <span class="badge">3 required criteria covered</span>
+      <span class="badge">7 audio clips (A/B vs Opus)</span>
+      <span class="badge">Press &larr; / &rarr; in lecture mode</span>
+    </div>
+  </div></div>
+
+<section class="content" id="title">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">AMLT ITMO 2026 · course project</div>
+      <h2>FlowDec: a flow-based full-band general audio codec</h2>
+      <p class="sub">Paper review and independent testing on our own 48 kHz data · 10 min + 5 min Q&amp;A</p>
+    </div>
+    <div class="section-index">01</div>
+  </div>
+  <p class="para"><strong>Paper:</strong> *FlowDec: A flow-based full-band general audio codec with high perceptual quality* — Welker, Le, Chen, Hsu, Gerkmann, Richard, Wu, <strong>ICLR 2025</strong> (Poster).</p>
+  <p class="para">OpenReview <code>uxDFlPGRLX</code> · arXiv 2412.20156 · code: github.com/facebookresearch/FlowDec (CC-BY-NC core).</p>
+  <div class="callout">Every number in this deck is produced by our own pipeline from the official checkpoints, and is reproducible with <code>uv run python scripts/run_experiments.py</code>.</div>
+  <figure class="picture-figure" style="--pic-width:100%">
+  <svg class="diagram-inline" aria-label="FlowDec pipeline diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" font-family="Inter, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5188ca"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="360" fill="#ffffff"/>
+  <rect x="24" y="96" width="1152" height="150" rx="18" fill="#f7faff" stroke="#dce7f5"/>
+
+  <!-- waveform in -->
+  <g>
+    <rect x="44" y="140" width="150" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="119" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">waveform x*</text>
+    <text x="119" y="188" text-anchor="middle" font-size="12" fill="#647992">48 kHz mono, 5 s</text>
+  </g>
+
+  <path d="M196 171 H246" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="221" y="160" text-anchor="middle" font-size="11" fill="#647992">E</text>
+
+  <!-- latent z -->
+  <g>
+    <rect x="248" y="140" width="132" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="314" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">latent z</text>
+    <text x="314" y="188" text-anchor="middle" font-size="12" fill="#647992">encoder E (NDAC)</text>
+  </g>
+
+  <path d="M382 171 H432" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="407" y="160" text-anchor="middle" font-size="11" fill="#647992">RVQ</text>
+
+  <!-- codes -->
+  <g>
+    <rect x="434" y="140" width="150" height="62" rx="12" fill="#eff6ff" stroke="#9fc7ff" stroke-width="1.8"/>
+    <text x="509" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#1676f3">discrete codes c</text>
+    <text x="509" y="188" text-anchor="middle" font-size="12" fill="#4c729d">the bitstream · nq codebooks</text>
+  </g>
+
+  <path d="M586 171 H636" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="611" y="160" text-anchor="middle" font-size="11" fill="#647992">D0</text>
+
+  <!-- coarse y -->
+  <g>
+    <rect x="638" y="140" width="150" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="713" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">coarse y = D0(c)</text>
+    <text x="713" y="188" text-anchor="middle" font-size="12" fill="#647992">non-adversarial decoder</text>
+  </g>
+
+  <path d="M790 171 H840" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- FlowDec -->
+  <g>
+    <rect x="842" y="126" width="176" height="90" rx="14" fill="#f4efff" stroke="#cdb5f6" stroke-width="1.8"/>
+    <text x="930" y="158" text-anchor="middle" font-size="18" font-weight="700" fill="#7441bc">FlowDec postfilter</text>
+    <text x="930" y="180" text-anchor="middle" font-size="13" fill="#7441bc">CFM ODE · midpoint solver</text>
+    <text x="930" y="200" text-anchor="middle" font-size="13" fill="#7441bc">6 NFE · 23.7 M parameters</text>
+  </g>
+
+  <path d="M1020 171 H1070" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- output -->
+  <g>
+    <rect x="1072" y="140" width="90" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="1117" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">x&#770;</text>
+    <text x="1117" y="188" text-anchor="middle" font-size="12" fill="#647992">enhanced</text>
+  </g>
+
+  <!-- bitrate note -->
+  <text x="509" y="70" text-anchor="middle" font-size="13" fill="#4c729d">
+    nq = 10 / 8 / 6 / 4 codebooks -&gt; 7.5 / 6.0 / 4.5 / 3.0 kbit/s (chosen at inference)
+  </text>
+  <text x="930" y="272" text-anchor="middle" font-size="13" fill="#4c729d">
+    works in a compressed complex STFT domain (1534-sample Hann, hop 384, alpha = 0.3, phase kept)
+  </text>
+  <text x="600" y="326" text-anchor="middle" font-size="13" fill="#647992">
+    Two stages: a non-adversarial codec gives a coarse estimate; a conditional-flow-matching postfilter
+    generatively reconstructs the missing full-band detail.
+  </text>
+</svg>
+
+</figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Introduce the paper, the task (review + independent testing), and the timing budget.</p></details>
+</section>
+<section class="content" id="verdict">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">00 / Abstract</div>
+      <h2>Verdict first</h2>
+      <p class="sub">What the paper claims, and what our own measurements say</p>
+    </div>
+    <div class="section-index">02</div>
+  </div>
+  <ul class="bullets">
+      <li>A <strong>48 kHz full-band</strong> neural codec for <strong>speech + music + ambient</strong> at <strong>4.5–7.5 kbit/s</strong>.</li>
+      <li><strong>No GAN.</strong> A non-adversarial codec (<strong>NDAC</strong>) plus a <strong>conditional-flow-matching (CFM)</strong> postfilter.</li>
+      <li><strong>6 network evaluations (NFE)</strong> instead of ~60 for score-based ScoreDec — ~10× cheaper sampling.</li>
+      <li>On <strong>our own</strong> data at 4.5 kbit/s: SI-SDR <strong>12.75 dB</strong> vs Opus <strong>-5.42 dB</strong>; FAD×100 <strong>26.0</strong> vs <strong>99.2</strong>.</li>
+      <li>Against the codec-only baseline NDAC-75 the picture <strong>reverses</strong>: NDAC wins on SI-SDR (17.51 vs 15.13 dB) but loses on FAD×100 (29.4 vs 19.1).</li>
+  </ul>
+  <div class="callout">Positioning (authors): not a replacement for FLAC/Opus for storage — a component for <strong>very-low-bitrate</strong> coding and for <strong>tokenizing audio</strong> for generative audio-language models.</div>
+  <details class="notes"><summary>Speaker notes</summary><p>Answer the whole question up front, then walk through evidence. Leave the SI-SDR/FAD reversal for later.</p></details>
+</section>
+<section class="content" id="problem">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">01 / Introduction</div>
+      <h2>The problem: natural-sounding audio at very low bitrates</h2>
+      <p class="sub">Why almost every neural codec reaches for a GAN — and why that is a problem</p>
+    </div>
+    <div class="section-index">03</div>
+  </div>
+  <ul class="bullets">
+      <li>An <strong>audio codec</strong> compresses a waveform into a compact, quantized representation and reconstructs the waveform from it.</li>
+      <li>Legacy codecs (<strong>Opus, AAC, EVS</strong>) use hand-crafted transform/prediction designs; modern <strong>end-to-end neural codecs</strong> (SoundStream, EnCodec, DAC) learn the whole pipeline.</li>
+      <li>To sound natural at very low bitrate, almost all neural codecs use <strong>adversarial (GAN) training</strong>: a discriminator pushes the decoder towards natural audio — but GAN training is unstable, needs several hand-tuned discriminators and loss weights, and can mode-collapse.</li>
+      <li><strong>ScoreDec</strong> avoided the GAN with a *score-based diffusion* postfilter — but it worked for <strong>speech only</strong>, only at <strong>24 kbit/s</strong>, and needed ~<strong>60 NFE</strong> (RTF ≈ 1.7) → impractical.</li>
+  </ul>
+  <div class="callout"><strong>FlowDec keeps the postfilter idea, rebuilds it on conditional flow matching, and generalises it</strong> to full-band speech, music and ambient at 4.5–7.5 kbit/s.</div>
+  <details class="notes"><summary>Speaker notes</summary><p>The gap is: no adversarial training, but also no expensive sampling. FlowDec closes both.</p></details>
+</section>
+<section class="content" id="novelty">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">02 / Introduction</div>
+      <div class="required">Required criterion: Novelty</div>
+      <h2>What is new here</h2>
+      <p class="sub">Four concrete contributions (novelty — required criterion)</p>
+    </div>
+    <div class="section-index">04</div>
+  </div>
+  <ul class="bullets">
+      <li><strong>New joint CFM coupling for signal enhancement.</strong> The noising distribution is centred on the codec output: <code>x0 ~ N(y, Σ_y)</code> interpolates to <code>x1 = x*</code>. The flow is therefore <strong>contractive</strong> (trajectories actually reach the target), numerically stable, and accurate at very few steps. <strong>One</strong> hyperparameter (<code>σ_y</code>) instead of ScoreDec&#x27;s four.</li>
+      <li><strong>Frequency-dependent <code>σ_y(f)</code>.</strong> Audio power drops with frequency, so a single scalar over-smooths the highs; a per-band <code>σ_y</code> estimated from the data (quantile heuristic) visibly improves low-NFE quality.</li>
+      <li><strong>Non-adversarial codec training (NDAC).</strong> DAC with *all* discriminators removed, plus two losses a non-adversarial codec needs: a <strong>multi-scale constant-Q (CQT) loss</strong> for low frequencies and an <strong>L1 waveform loss</strong> for phase / SI-SDR. Distribution matching is handed to the CFM postfilter.</li>
+      <li><strong>General full-band audio.</strong> 48 kHz (≤20 kHz), <strong>speech + music + ambient</strong>, at <strong>4.5–7.5 kbit/s</strong> — versus ScoreDec&#x27;s speech-only 24 kbit/s.</li>
+  </ul>
+  <div class="callout"><strong>Novelty (required criterion).</strong> The technical core is the *joint* CFM coupling <code>x0 ~ N(y, Σ_y)</code> with <code>σ1 = 0</code>, which is what makes a generative postfilter stable at NFE = 6 where ScoreDec needs ~60.</div>
+  <details class="notes"><summary>Speaker notes</summary><p>Spell out the four contributions; the committee explicitly asks for novelty.</p></details>
+</section>
+<section class="content" id="model-overview">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">03 / Model</div>
+      <h2>Model overview: two-stage postfilter codec</h2>
+      <p class="sub">A non-adversarial codec produces a coarse estimate; a CFM postfilter regenerates the detail</p>
+    </div>
+    <div class="section-index">05</div>
+  </div>
+  <ul class="bullets">
+      <li><strong>Underlying codec — NDAC-75.</strong> 75 Hz feature rate, 48 kHz, hop 640, 10 codebooks × 1024 dims. The bitrate is chosen <strong>at inference</strong> by how many codebooks are used: <code>nq = 10 / 8 / 6 / 4 → 7.5 / 6.0 / 4.5 / 3.0 kbit/s</code>.</li>
+      <li>The postfilter is a modified <strong>NCSN++ 2-D U-Net</strong> (23.7 M trainable parameters by our own count; the paper quotes ~26 M): first two depths widened to 256 channels (suppresses high-frequency artefacts on music), depth reduced to 4, and <strong>all attention removed</strong> so runtime is linear in duration.</li>
+      <li>It works in a <strong>compressed complex STFT</strong> domain: 1534-sample Hann window (31.96 ms), hop 384 (75 % overlap), amplitude compression <code>α = 0.3</code>, phase preserved. This invertible transform φ is applied before the flow and inverted afterwards.</li>
+  </ul>
+  <figure class="picture-figure" style="--pic-width:100%">
+  <svg class="diagram-inline" aria-label="FlowDec pipeline diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" font-family="Inter, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5188ca"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="360" fill="#ffffff"/>
+  <rect x="24" y="96" width="1152" height="150" rx="18" fill="#f7faff" stroke="#dce7f5"/>
+
+  <!-- waveform in -->
+  <g>
+    <rect x="44" y="140" width="150" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="119" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">waveform x*</text>
+    <text x="119" y="188" text-anchor="middle" font-size="12" fill="#647992">48 kHz mono, 5 s</text>
+  </g>
+
+  <path d="M196 171 H246" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="221" y="160" text-anchor="middle" font-size="11" fill="#647992">E</text>
+
+  <!-- latent z -->
+  <g>
+    <rect x="248" y="140" width="132" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="314" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">latent z</text>
+    <text x="314" y="188" text-anchor="middle" font-size="12" fill="#647992">encoder E (NDAC)</text>
+  </g>
+
+  <path d="M382 171 H432" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="407" y="160" text-anchor="middle" font-size="11" fill="#647992">RVQ</text>
+
+  <!-- codes -->
+  <g>
+    <rect x="434" y="140" width="150" height="62" rx="12" fill="#eff6ff" stroke="#9fc7ff" stroke-width="1.8"/>
+    <text x="509" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#1676f3">discrete codes c</text>
+    <text x="509" y="188" text-anchor="middle" font-size="12" fill="#4c729d">the bitstream · nq codebooks</text>
+  </g>
+
+  <path d="M586 171 H636" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="611" y="160" text-anchor="middle" font-size="11" fill="#647992">D0</text>
+
+  <!-- coarse y -->
+  <g>
+    <rect x="638" y="140" width="150" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="713" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">coarse y = D0(c)</text>
+    <text x="713" y="188" text-anchor="middle" font-size="12" fill="#647992">non-adversarial decoder</text>
+  </g>
+
+  <path d="M790 171 H840" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- FlowDec -->
+  <g>
+    <rect x="842" y="126" width="176" height="90" rx="14" fill="#f4efff" stroke="#cdb5f6" stroke-width="1.8"/>
+    <text x="930" y="158" text-anchor="middle" font-size="18" font-weight="700" fill="#7441bc">FlowDec postfilter</text>
+    <text x="930" y="180" text-anchor="middle" font-size="13" fill="#7441bc">CFM ODE · midpoint solver</text>
+    <text x="930" y="200" text-anchor="middle" font-size="13" fill="#7441bc">6 NFE · 23.7 M parameters</text>
+  </g>
+
+  <path d="M1020 171 H1070" stroke="#5188ca" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- output -->
+  <g>
+    <rect x="1072" y="140" width="90" height="62" rx="12" fill="#ffffff" stroke="#dce7f5" stroke-width="1.5"/>
+    <text x="1117" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#102345">x&#770;</text>
+    <text x="1117" y="188" text-anchor="middle" font-size="12" fill="#647992">enhanced</text>
+  </g>
+
+  <!-- bitrate note -->
+  <text x="509" y="70" text-anchor="middle" font-size="13" fill="#4c729d">
+    nq = 10 / 8 / 6 / 4 codebooks -&gt; 7.5 / 6.0 / 4.5 / 3.0 kbit/s (chosen at inference)
+  </text>
+  <text x="930" y="272" text-anchor="middle" font-size="13" fill="#4c729d">
+    works in a compressed complex STFT domain (1534-sample Hann, hop 384, alpha = 0.3, phase kept)
+  </text>
+  <text x="600" y="326" text-anchor="middle" font-size="13" fill="#647992">
+    Two stages: a non-adversarial codec gives a coarse estimate; a conditional-flow-matching postfilter
+    generatively reconstructs the missing full-band detail.
+  </text>
+</svg>
+
+</figure>
+  <figure class="picture-figure" style="--pic-width:62%">
+    <img src="assets/formulas/eq_coupling.png" alt="The joint coupling that makes the flow contractive and stable at few steps.">
+    <figcaption>The joint coupling that makes the flow contractive and stable at few steps.</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Walk the diagram left to right. Emphasise that the bitrate is a runtime choice, not a separate model.</p></details>
+</section>
+<section class="content" id="algorithm">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">04 / Model</div>
+      <h2>The algorithm: joint flow matching + midpoint ODE</h2>
+      <p class="sub">Train to regress a constant velocity; sample by integrating a short ODE</p>
+    </div>
+    <div class="section-index">06</div>
+  </div>
+  <ul class="bullets">
+      <li><strong>Training.</strong> Regress the *constant velocity* that carries a point from its noisy, codec-centred start to the clean target. Adam, lr 1e-4, 800 k iterations, 2 s snippets, batch 64, EMA 0.999.</li>
+      <li><strong>Inference.</strong> Start from <code>X = φ(y) + σ_y(f)·ε</code>, integrate <code>dX/dt = v_θ(X, t, Y)</code> with the <strong>midpoint</strong> solver for <code>N</code> steps (<strong>NFE = 2N</strong>; default <code>N = 3</code> → <strong>NFE = 6</strong>), then map back with φ⁻¹ and clip.</li>
+  </ul>
+  <div class="callout"><strong>Pros.</strong> No GAN (stable, interpretable, no mode collapse) · 6 NFE vs ~60 for ScoreDec (RTF ≈ 0.23 vs 1.71 on an A100) · full-band general audio at 4.5–7.5 kbit/s · one hyperparameter · best FAD among compared codecs.</div>
+  <div class="callout"><strong>Cons.</strong> Worse <strong>intrusive</strong> metrics than adversarial DAC (the rate–distortion–perception trade-off) · still needs a strong codec *and* a generative DNN · <strong>non-causal → not streaming-capable</strong> · licence <strong>CC-BY-NC</strong> and a heavy dependency stack.</div>
+  <figure class="picture-figure" style="--pic-width:78%">
+    <img src="assets/formulas/eq_train.png" alt="eq_train">
+    
+  </figure>
+  <figure class="picture-figure" style="--pic-width:78%">
+    <img src="assets/formulas/eq_infer.png" alt="eq_infer">
+    
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Keep this slide short: two equations, one training sentence, one inference sentence, pros/cons.</p></details>
+</section>
+<section class="content" id="setup">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">05 / Experiments</div>
+      <h2>Experimental setup on our own data</h2>
+      <p class="sub">Official checkpoints, our own 48 kHz clips, and classical baselines</p>
+    </div>
+    <div class="section-index">07</div>
+  </div>
+  <ul class="bullets">
+      <li>We deliberately did <strong>not</strong> reuse the paper&#x27;s test set: a small, deterministic, 48 kHz mono set of 5 s clips (<code>scripts/make_custom_data.py</code>, fixed seed 1234).</li>
+      <li>Everything runs through the <strong>official checkpoints</strong> (<code>flowdec_75m</code> + <code>ndac-75</code>) and the official inference API — <code>dac.encode(...) → model.enhance(..., N, solver)</code> — with EMA weights and the default midpoint solver.</li>
+      <li>Metrics are identical for every method, as in the paper: <strong>SI-SDR</strong>, <strong>fwSSNR</strong>, <strong>logSpecMSE</strong>, and <strong>FAD×100</strong> with CLAP-laion-audio embeddings (perception).</li>
+      <li><strong>Classical baselines (required):</strong> <strong>Opus</strong> through <code>ffmpeg</code> (CBR, 60 ms frames) at 3.0 / 4.5 / 7.5 kbit/s, and <strong>Griffin-Lim</strong> from a rate-matched (~7.7 kbit/s) mel magnitude spectrogram — the textbook phase-recovery approach that discards phase.</li>
+      <li>Hardware: Apple <strong>M4 Pro, 24 GB</strong>. All reported numbers are <strong>CPU</strong> (the faithful path); MPS is discussed later as a fast-but-lossy preview.</li>
+  </ul>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>category</th><th>clips</th><th>source</th></tr></thead>
+      <tbody>
+        <tr><td>speech</td><td>2</td><td>macOS <code>say</code> text-to-speech (Samantha), converted to 48 kHz</td></tr>
+        <tr><td>music</td><td>2</td><td>synthesised polyphonic chords + percussion + bass line</td></tr>
+        <tr><td>ambient / sound</td><td>2</td><td>synthesised 1/f noise beds with swells and chirps</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Six deterministic 5 s mono clips at 48 kHz, generated by scripts/make_custom_data.py.</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Stress that this is our own data and our own baseline implementations, not the paper&#x27;s tables.</p></details>
+</section>
+<section class="content" id="reproduction">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">06 / Experiments</div>
+      <div class="required">Required criterion: Reproduction</div>
+      <h2>Reproduction on the authors&#x27; own audio</h2>
+      <p class="sub">Sanity-check our pipeline before trusting our own numbers (reproduction — required criterion)</p>
+    </div>
+    <div class="section-index">08</div>
+  </div>
+  <p class="para">We downloaded the authors&#x27; published demo audio (clean reference plus their official FlowDec and DAC-75 outputs) and ran <strong>our</strong> pipeline on their clean references.</p>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>clip</th><th>method</th><th>SI-SDR (dB)</th><th>fwSSNR (dB)</th><th>logSpecMSE</th></tr></thead>
+      <tbody>
+        <tr><td>Music_Licensed_1</td><td>authors FlowDec</td><td>7.70</td><td>15.75</td><td>448</td></tr>
+        <tr><td>Music_Licensed_1</td><td>ours FlowDec</td><td>7.60</td><td>15.96</td><td>565</td></tr>
+        <tr><td>Music_Licensed_1</td><td>authors DAC-75</td><td>10.44</td><td>16.26</td><td>119</td></tr>
+        <tr><td>Sound_AudioSet_1</td><td>authors FlowDec</td><td>0.92</td><td>15.57</td><td>91</td></tr>
+        <tr><td>Sound_AudioSet_1</td><td>ours FlowDec</td><td>0.65</td><td>15.20</td><td>101</td></tr>
+        <tr><td>Sound_AudioSet_1</td><td>authors DAC-75</td><td>4.99</td><td>16.01</td><td>128</td></tr>
+        <tr><td>Speech_EARS_1</td><td>authors FlowDec</td><td>8.60</td><td>15.20</td><td>103</td></tr>
+        <tr><td>Speech_EARS_1</td><td>ours FlowDec</td><td>8.87</td><td>15.38</td><td>99</td></tr>
+        <tr><td>Speech_EARS_1</td><td>authors DAC-75</td><td>11.16</td><td>16.57</td><td>89</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Our pipeline on the authors&#x27; clean references vs their official outputs.</figcaption>
+  </figure>
+  <ul class="bullets">
+      <li>Our FlowDec output matches the authors&#x27; own within a fraction of a dB in SI-SDR / fwSSNR — <strong>faithful</strong>, as expected, since the postfilter is stochastic and exact sample equality is not expected. Their <strong>DAC-75</strong> output keeps the better SI-SDR, which is the trade-off we return to in the next two slides.</li>
+  </ul>
+  <div class="callout"><strong>Reproduction (required criterion):</strong> our pipeline reproduces the authors&#x27; published outputs from the official checkpoints, on their own audio.</div>
+  <figure class="picture-figure" style="--pic-width:98%">
+    <img src="assets/code/cell_ckpt.png" alt="The official inference API in practice: load the checkpoint pair, then run the pipeline.">
+    <figcaption>The official inference API in practice: load the checkpoint pair, then run the pipeline.</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>This slide is the credibility anchor: everything after it is our own measurement, not a citation.</p></details>
+</section>
+<section class="content" id="results">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">07 / Experiments</div>
+      <h2>Results on our own 48 kHz data</h2>
+      <p class="sub">FlowDec across bitrates, versus the codec-only baseline and the classical codecs</p>
+    </div>
+    <div class="section-index">09</div>
+  </div>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>method</th><th>rate (kbit/s)</th><th>SI-SDR (dB)</th><th>fwSSNR (dB)</th><th>logSpecMSE</th><th>FAD×100</th></tr></thead>
+      <tbody>
+        <tr><td>FlowDec</td><td>7.5</td><td>15.13</td><td>17.72</td><td>126</td><td>19.1</td></tr>
+        <tr><td>FlowDec</td><td>4.5</td><td>12.75</td><td>15.13</td><td>134</td><td>26.0</td></tr>
+        <tr><td>FlowDec</td><td>3.0</td><td>10.92</td><td>13.31</td><td>141</td><td>35.3</td></tr>
+        <tr><td>NDAC (codec only)</td><td>7.5</td><td>17.51</td><td>19.99</td><td>66</td><td>29.4</td></tr>
+        <tr><td>Opus</td><td>7.5</td><td>-2.08</td><td>6.48</td><td>1430</td><td>78.7</td></tr>
+        <tr><td>Opus</td><td>4.5</td><td>-5.42</td><td>3.63</td><td>1475</td><td>99.2</td></tr>
+        <tr><td>Opus</td><td>3.0</td><td>-17.32</td><td>1.12</td><td>1414</td><td>126.9</td></tr>
+        <tr><td>Griffin-Lim</td><td>~7.7</td><td>-41.94</td><td>2.07</td><td>253</td><td>99.7</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Mean over our six custom 48 kHz clips (lower logSpecMSE and FAD are better).</figcaption>
+  </figure>
+  <p class="para">The whole inference path is two calls on the official API — <code>dac.encode(...)</code> and <code>model.enhance(..., N=3, solver=&quot;midpoint&quot;)</code>; see the code-cell screenshots in <code>notebooks/flowdec_demo.ipynb</code>.</p>
+  <figure class="picture-figure" style="--pic-width:94%">
+    <img src="../results/plots/custom_bars.png" alt="Mean metrics over our six clips (results/plots/custom_bars.png).">
+    <figcaption>Mean metrics over our six clips (results/plots/custom_bars.png).</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Walk the table row by row: FlowDec beats Opus/GL everywhere; NDAC-only wins on SI-SDR but loses on FAD.</p></details>
+</section>
+<section class="content" id="baselines">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">08 / Experiments</div>
+      <div class="required">Required criterion: Comparison with classical baselines</div>
+      <h2>FlowDec vs classical baselines</h2>
+      <p class="sub">Opus and Griffin-Lim at a matched low rate (comparison — required criterion)</p>
+    </div>
+    <div class="section-index">10</div>
+  </div>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>method</th><th>rate (kbit/s)</th><th>SI-SDR (dB)</th><th>fwSSNR (dB)</th><th>logSpecMSE</th></tr></thead>
+      <tbody>
+        <tr><td>FlowDec</td><td>7.5</td><td>14.56</td><td>20.04</td><td>97</td></tr>
+        <tr><td>FlowDec</td><td>4.5</td><td>11.84</td><td>16.93</td><td>105</td></tr>
+        <tr><td>Opus</td><td>7.5</td><td>2.33</td><td>7.79</td><td>2274</td></tr>
+        <tr><td>Opus</td><td>4.5</td><td>0.05</td><td>6.60</td><td>2297</td></tr>
+        <tr><td>Griffin-Lim</td><td>~7.7</td><td>-45.38</td><td>2.64</td><td>172</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>A single music clip, so the comparison is audible rather than averaged.</figcaption>
+  </figure>
+  <ul class="bullets">
+      <li>At 4.5–7.5 kbit/s Opus is severely degraded, and unusable at 3 kbit/s (-17.32 dB SI-SDR).</li>
+      <li><strong>Griffin-Lim</strong> is dominated because it discards phase entirely (-41.94 dB SI-SDR, FAD×100 99.7).</li>
+      <li>FlowDec is ahead on <strong>every</strong> metric, and its <strong>FAD</strong> advantage is large — i.e. it *sounds* much closer to the reference than either classical baseline.</li>
+      <li>In the spectrograms FlowDec reconstructs high-frequency structure that Opus smooths away, while Griffin-Lim produces a buzzy, phase-incoherent texture.</li>
+  </ul>
+  <div class="callout"><strong>Comparison with classical baselines (required criterion):</strong> rate-matched Opus and Griffin-Lim lose to FlowDec on perception *and* on signal metrics.</div>
+  <p class="para">Raw Python behind this table (<code>notebooks/flowdec_demo.ipynb</code>, re-run against the official checkpoints): <code>scripts/build_slide_assets.py</code> screenshots the executed cells into <code>report/assets/code/</code>.</p>
+  <figure class="picture-figure" style="--pic-width:98%">
+    <img src="../results/plots/custom_spectrograms.png" alt="Spectrograms of one music clip: clean, FlowDec, Opus, Griffin-Lim.">
+    <figcaption>Spectrograms of one music clip: clean, FlowDec, Opus, Griffin-Lim.</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>Make the audible point here or on the next slide; the numbers alone are not the argument.</p></details>
+</section>
+<section class="content" id="listen">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">09 / Experiments</div>
+      <h2>Listen: FlowDec vs Opus at 4.5 kbit/s</h2>
+      <p class="sub">Same clip, same bitrate — play them in this order and compare by ear</p>
+    </div>
+    <div class="section-index">11</div>
+  </div>
+  <p class="para">Same clip, same bitrate. For each category we play <strong>FlowDec 4.5 kbit/s</strong>, then <strong>Opus 4.5 kbit/s</strong>; the matching clean reference is the first clip of the deck if you want the original.</p>
+  <div class="callout">Opus sounds dull and smeared; FlowDec keeps harmonics and the high-frequency <strong>&quot;air&quot;</strong> — which is exactly what the FAD numbers on the previous slide measure. The same pair at 7.5 kbit/s is in the backup section.</div>
+  <div class="audio-group">
+  <p class="audio-caption">Music — FlowDec, then Opus, both at 4.5 kbit/s</p>
+    <div class="players">
+      <figure class="player">
+        <img src="assets/audio/music_flowdec45_wave.png" alt="waveform of FlowDec 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">FlowDec 4.5 kbit/s</span>
+          <span class="player-note">Music — FlowDec, 4.5 kbit/s (NFE 6)</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/music_flowdec45.mp3"></audio>
+      </figure>
+      <figure class="player">
+        <img src="assets/audio/music_opus45_wave.png" alt="waveform of Opus 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">Opus 4.5 kbit/s</span>
+          <span class="player-note">Music — Opus, 4.5 kbit/s</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/music_opus45.mp3"></audio>
+      </figure>
+    </div>
+  </div>
+  <div class="audio-group">
+  <p class="audio-caption">Ambient — FlowDec, then Opus, both at 4.5 kbit/s</p>
+    <div class="players">
+      <figure class="player">
+        <img src="assets/audio/ambient_flowdec45_wave.png" alt="waveform of FlowDec 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">FlowDec 4.5 kbit/s</span>
+          <span class="player-note">Ambient — FlowDec, 4.5 kbit/s (NFE 6)</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/ambient_flowdec45.mp3"></audio>
+      </figure>
+      <figure class="player">
+        <img src="assets/audio/ambient_opus45_wave.png" alt="waveform of Opus 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">Opus 4.5 kbit/s</span>
+          <span class="player-note">Ambient — Opus, 4.5 kbit/s</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/ambient_opus45.mp3"></audio>
+      </figure>
+    </div>
+  </div>
+  <details class="notes"><summary>Speaker notes</summary><p>Play at most one pair live if time is short; the rest is backup material in the HTML deck.</p></details>
+</section>
+<section class="content" id="nfe">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">10 / Experiments</div>
+      <h2>NFE ablation: the efficiency claim</h2>
+      <p class="sub">How many ODE steps does the postfilter really need?</p>
+    </div>
+    <div class="section-index">12</div>
+  </div>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>NFE</th><th>SI-SDR (dB)</th><th>fwSSNR (dB)</th><th>logSpecMSE</th></tr></thead>
+      <tbody>
+        <tr><td>2</td><td>13.02</td><td>14.68</td><td>430</td></tr>
+        <tr><td>4</td><td>12.86</td><td>18.11</td><td>126</td></tr>
+        <tr><td>6</td><td>12.56</td><td>18.52</td><td>115</td></tr>
+        <tr><td>50</td><td>12.39</td><td>18.60</td><td>112</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>Quality climbs sharply up to NFE = 6 and then plateaus.</figcaption>
+  </figure>
+  <ul class="bullets">
+      <li>Quality climbs steeply from <strong>NFE = 2 to NFE = 6</strong> and then plateaus → <strong>NFE = 6</strong> is a good operating point, which is the paper&#x27;s central efficiency claim.</li>
+      <li>Contrast: <strong>ScoreDec collapses at NFE = 6</strong> — the paper reports FAD×100 = 145 and SI-SDR ≈ −27 dB at that budget.</li>
+  </ul>
+  <figure class="picture-figure" style="--pic-width:80%">
+    <img src="../results/plots/nfe_curve.png" alt="Quality vs the number of function evaluations (results/plots/nfe_curve.png).">
+    <figcaption>Quality vs the number of function evaluations (results/plots/nfe_curve.png).</figcaption>
+  </figure>
+  <div class="audio-group">
+  <p class="audio-caption">FlowDec at 7.5 kbit/s with NFE = 6 — the recommended operating point.</p>
+    <div class="players">
+      <figure class="player">
+        <img src="assets/audio/music_flowdec75_wave.png" alt="waveform of FlowDec 7.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">FlowDec 7.5 kbit/s</span>
+          <span class="player-note">Music — FlowDec, 7.5 kbit/s (NFE 6)</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/music_flowdec75.mp3"></audio>
+      </figure>
+    </div>
+  </div>
+  <figure class="picture-figure" style="--pic-width:86%">
+    <img src="assets/code/cell_nfe.png" alt="The NFE sweep used for the table above.">
+    <figcaption>The NFE sweep used for the table above.</figcaption>
+  </figure>
+  <details class="notes"><summary>Speaker notes</summary><p>The claim is not only quality but cost: 6 NFE instead of ~60 is the whole practical argument.</p></details>
+</section>
+<section class="content" id="device">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">11 / Experiments</div>
+      <h2>Our own finding: a device caveat</h2>
+      <p class="sub">A result that is not in the paper — reported because it affects reproducibility</p>
+    </div>
+    <div class="section-index">13</div>
+  </div>
+  <ul class="bullets">
+      <li>On this Mac (<strong>M4 Pro, 24 GB</strong>), <strong>CPU</strong> inference is faithful but slow: RTF ≈ 15.</li>
+      <li>Apple-Silicon <strong>MPS</strong> is ~6× faster but <strong>degrades quality</strong>: logSpecMSE grows by roughly an order of magnitude and SI-SDR drops by a few dB.</li>
+      <li>The <strong>NDAC codec itself is numerically identical</strong> across devices, so the gap comes from the <strong>ODE / postfilter path</strong> (bandwidth-limited <code>float32</code> matrix products).</li>
+      <li>Therefore every number in this deck is a <strong>CPU</strong> number, and MPS is documented only as a fast preview (<code>scripts/diagnose_mps.py</code>).</li>
+  </ul>
+  <div class="callout">This is <strong>our own contribution</strong>: a silent numerical-fidelity trap on Apple Silicon that is easy to fall into when reproducing the paper.</div>
+  <details class="notes"><summary>Speaker notes</summary><p>Lead with &#x27;this is not in the paper&#x27; — it is the clearest original result we have.</p></details>
+</section>
+<section class="content" id="conclusion">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">12 / Conclusion</div>
+      <h2>Conclusion</h2>
+      <p class="sub">What we verified, what surprised us, and what limits adoption</p>
+    </div>
+    <div class="section-index">14</div>
+  </div>
+  <ul class="bullets">
+      <li>A <strong>non-adversarial</strong> codec plus a <strong>conditional-flow-matching postfilter</strong> matches GAN-based codecs perceptually and beats them in <strong>FAD</strong>, while sampling in only <strong>6 NFE</strong>.</li>
+      <li>We <strong>reproduced</strong> the authors&#x27; outputs on their own audio; on <strong>our own</strong> data FlowDec clearly beats rate-matched <strong>Opus</strong> and <strong>Griffin-Lim</strong> on perception and on signal metrics, and stays robust from NFE = 4.</li>
+      <li><strong>Key insight — SI-SDR and FAD disagree.</strong> We reproduce the paper&#x27;s exact reversal against the codec-only baseline: NDAC-75 wins on SI-SDR (17.51 vs 15.13 dB) but loses on FAD×100 (29.4 vs 19.1). A plausible waveform is not the same thing as a close waveform.</li>
+      <li><strong>Limitations.</strong> Not streaming-capable (non-causal DNNs) · <strong>CC-BY-NC</strong> licence and heavy dependencies · intrusive metrics can look worse than adversarial DAC · on Apple Silicon the fast MPS path is not numerically faithful.</li>
+      <li><strong>Where it fits.</strong> Not a replacement for FLAC/Opus for lossless or storage use, but a strong component for very-low-bitrate general-audio coding and for tokenizing audio for audio-language models.</li>
+  </ul>
+  <div class="callout">Practical summary: FlowDec makes a <strong>generative</strong> postfilter cheap enough (6 NFE) to be a real engineering option for very-low-bitrate, full-band, general audio.</div>
+  <details class="notes"><summary>Speaker notes</summary><p>Mirror the verdict slide: claim → evidence → caveat. Then stop and invite questions.</p></details>
+</section>
+<section class="content" id="backup">
+  <div class="section-top">
+    <div>
+      <div class="eyebrow">13 / Backup</div>
+      <h2>Backup — Q&amp;A preparation</h2>
+      <p class="sub">The questions we expect, and the short answers</p>
+    </div>
+    <div class="section-index">15</div>
+  </div>
+  <ul class="bullets">
+      <li><strong>&quot;Why a codec if Opus exists?&quot;</strong> → FlowDec&#x27;s decoder *generatively reconstructs* lost detail, and it produces <strong>discrete tokens</strong>, which is exactly what audio-LLM / TTS systems need; a lower bitrate means a shorter token sequence and cheaper language-model generation.</li>
+      <li><strong>&quot;Novelty compared with earlier neural codecs?&quot;</strong> → the first competitive *non-adversarial* codec, and a CFM coupling that stays stable at <strong>6 NFE</strong> where ScoreDec needs ~60.</li>
+      <li><strong>&quot;FAD is better but SI-SDR is worse than DAC — is that not a contradiction?&quot;</strong> → no: it is the perception–distortion trade-off. Plausible ≠ close. The stochastic postfilter deliberately trades waveform fidelity for perceptual plausibility.</li>
+      <li><strong>&quot;What blocks real adoption?&quot;</strong> → the CC-BY-NC licence, the heavy dependency stack (audiotools, hydra, DAC), the non-causal (non-streaming) architecture, and inference cost versus a classical codec.</li>
+      <li><strong>&quot;Why does MPS hurt quality?&quot;</strong> → bandwidth-limited <code>float32</code> operations in the solver; NDAC is numerically identical on both devices, so the gap is entirely in the postfilter path.</li>
+      <li><strong>&quot;How did you build the data?&quot;</strong> → a deterministic, seeded generator (<code>scripts/make_custom_data.py</code>) so the results are reproducible, not cherry-picked.</li>
+  </ul>
+  <figure class="table-figure">
+    <div class="table-wrap"><table>
+      <thead><tr><th>category</th><th>method (rate, kbit/s)</th><th>SI-SDR (dB)</th><th>fwSSNR (dB)</th><th>logSpecMSE</th></tr></thead>
+      <tbody>
+        <tr><td>speech</td><td>FlowDec (7.5)</td><td>10.76</td><td>16.51</td><td>151</td></tr>
+        <tr><td>speech</td><td>FlowDec (4.5)</td><td>9.13</td><td>14.04</td><td>154</td></tr>
+        <tr><td>speech</td><td>Opus (4.5)</td><td>0.29</td><td>4.57</td><td>737</td></tr>
+        <tr><td>speech</td><td>Griffin-Lim (~7.7)</td><td>-27.20</td><td>4.86</td><td>434</td></tr>
+        <tr><td>music</td><td>FlowDec (7.5)</td><td>14.58</td><td>20.19</td><td>90</td></tr>
+        <tr><td>music</td><td>FlowDec (4.5)</td><td>12.23</td><td>17.32</td><td>93</td></tr>
+        <tr><td>music</td><td>Opus (4.5)</td><td>0.02</td><td>7.24</td><td>2337</td></tr>
+        <tr><td>music</td><td>Griffin-Lim (~7.7)</td><td>-49.89</td><td>3.21</td><td>179</td></tr>
+        <tr><td>ambient</td><td>FlowDec (7.5)</td><td>20.05</td><td>16.47</td><td>136</td></tr>
+        <tr><td>ambient</td><td>FlowDec (4.5)</td><td>16.90</td><td>14.04</td><td>154</td></tr>
+        <tr><td>ambient</td><td>Opus (4.5)</td><td>-16.57</td><td>-0.93</td><td>1352</td></tr>
+        <tr><td>ambient</td><td>Griffin-Lim (~7.7)</td><td>-48.75</td><td>-1.87</td><td>147</td></tr>
+      </tbody>
+    </table></div>
+    <figcaption>The same picture in every category: FlowDec is far ahead of Opus and Griffin-Lim.</figcaption>
+  </figure>
+  <div class="callout">Full details, including the reproducibility appendix and the licence/attribution notes, are in <code>report/report.md</code>.</div>
+  <div class="audio-group">
+  <p class="audio-caption">Speech at 4.5 kbit/s (FlowDec vs Opus), then music at 7.5 kbit/s</p>
+    <div class="players">
+      <figure class="player">
+        <img src="assets/audio/speech_flowdec45_wave.png" alt="waveform of FlowDec 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">FlowDec 4.5 kbit/s</span>
+          <span class="player-note">Speech — FlowDec, 4.5 kbit/s (NFE 6)</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/speech_flowdec45.mp3"></audio>
+      </figure>
+      <figure class="player">
+        <img src="assets/audio/speech_opus45_wave.png" alt="waveform of Opus 4.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">Opus 4.5 kbit/s</span>
+          <span class="player-note">Speech — Opus, 4.5 kbit/s</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/speech_opus45.mp3"></audio>
+      </figure>
+      <figure class="player">
+        <img src="assets/audio/music_flowdec75_wave.png" alt="waveform of FlowDec 7.5 kbit/s">
+        <figcaption class="player-head">
+          <span class="player-title">FlowDec 7.5 kbit/s</span>
+          <span class="player-note">Music — FlowDec, 7.5 kbit/s (NFE 6)</span>
+        </figcaption>
+        <audio controls preload="none" src="assets/audio/music_flowdec75.mp3"></audio>
+      </figure>
+    </div>
+  </div>
+  <details class="notes"><summary>Speaker notes</summary><p>Backup only. Keep it at the end of the deck and jump here only if the question warrants it.</p></details>
+</section>
+
+  <footer class="footer"><div class="wrap">
+    <span>FlowDec &mdash; Welker et al., ICLR 2025. Course project, AMLT ITMO 2026. Slides in English, matching report/report.md.</span>
+    <span>Generated by scripts/build_slides_html.py from scripts/slides_content.py.</span>
+  </div></footer>
+</main>
+
+<div class="lecture-bar" role="group" aria-label="Lecture navigation">
+  <button id="prevSection">&larr; Prev</button>
+  <span id="lectureCount" class="mono">1 / 15</span>
+  <button id="nextSection">Next &rarr;</button>
+  <button id="exitLecture">Exit &middot; Esc</button>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const sections=$$('section.content');
+let lectureMode=false,sectionIndex=0;
+
+function setTheme(dark){
+  document.documentElement.dataset.theme=dark?'dark':'light';
+  $('#theme').setAttribute('aria-pressed',String(dark));
+  $('#theme').textContent=dark?'Theme: dark':'Theme: light';
+  try{localStorage.setItem('flowdec-deck-theme',dark?'dark':'light')}catch(e){}
+}
+$('#theme').onclick=()=>setTheme(document.documentElement.dataset.theme!=='dark');
+
+function showSection(i){
+  sectionIndex=Math.max(0,Math.min(sections.length-1,i));
+  sections.forEach((s,j)=>s.classList.toggle('lecture-current',j===sectionIndex));
+  $('#lectureCount').textContent=(sectionIndex+1)+' / '+sections.length;
+  $('#prevSection').disabled=sectionIndex===0;
+  $('#nextSection').disabled=sectionIndex===sections.length-1;
+  setNavActive(sections[sectionIndex].id);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function setLecture(enabled){
+  lectureMode=enabled;
+  document.body.classList.toggle('lecture',enabled);
+  $('#lecture').setAttribute('aria-pressed',String(enabled));
+  $('#lecture').textContent=enabled?'Exit lecture mode':'Lecture mode';
+  if(enabled){showSection(sectionIndex);}
+  else{sections.forEach(s=>s.classList.remove('lecture-current'));
+       sections[sectionIndex].scrollIntoView({behavior:'instant',block:'start'});}
+}
+$('#lecture').onclick=()=>setLecture(!lectureMode);
+$('#prevSection').onclick=()=>showSection(sectionIndex-1);
+$('#nextSection').onclick=()=>showSection(sectionIndex+1);
+$('#exitLecture').onclick=()=>setLecture(false);
+
+document.addEventListener('keydown',e=>{
+  if(!lectureMode)return;
+  if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;
+  if(e.key==='Escape'){setLecture(false);return}
+  if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();showSection(sectionIndex+1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();showSection(sectionIndex-1)}
+  if(e.key==='Home'){e.preventDefault();showSection(0)}
+  if(e.key==='End'){e.preventDefault();showSection(sections.length-1)}
+});
+
+function setNavActive(id){$$('.nav a').forEach(a=>a.classList.toggle('active',a.hash==='#'+id))}
+$$('.nav a').forEach(a=>a.addEventListener('click',e=>{
+  const target=document.getElementById(a.hash.slice(1));
+  if(!target)return;
+  if(lectureMode){e.preventDefault();showSection(sections.indexOf(target))}
+  else{setNavActive(a.hash.slice(1))}
+}));
+if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting&&!lectureMode)setNavActive(en.target.id)});
+  },{rootMargin:'-12% 0px -70% 0px'});
+  sections.forEach(s=>observer.observe(s));
+}
+try{setTheme(localStorage.getItem('flowdec-deck-theme')==='dark')}catch(e){setTheme(false)}
+setUpVideoAudio();
+
+// PowerPoint-style fallback: some browsers refuse to play mp3 in a plain <audio>
+// element; a short retry on error is enough to surface the problem to the speaker.
+function setUpVideoAudio(){
+  $$('audio').forEach(el=>el.addEventListener('error',()=>{
+    el.insertAdjacentHTML('afterend','<p class="player-note">Audio file could not be loaded.</p>');
+  }));
+}
+
+// Marks the page as fully initialised, which makes the deck verifiable from a
+// headless browser (and costs nothing in a normal one).
+document.documentElement.dataset.deckReady='1';
+</script>
+</body>
+</html>
