@@ -15,6 +15,8 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.presentation import Presentation as PresentationType
 from pptx.slide import Slide
+from pptx.table import Table
+from pptx.text.text import TextFrame
 from pptx.util import Inches, Pt
 
 import slides_content as sc
@@ -142,6 +144,20 @@ def add_line(slide: Slide, left: float, top: float, width: float, color: RGBColo
 
 
 @beartype
+def set_font_margins(frame: TextFrame, margin_in: float) -> None:
+    """
+    Zero (or set) the frame margins.
+
+    `python-pptx` implements these as read/write properties, but the bundled
+    stubs declare them read-only, hence the narrow pyright exceptions.
+    """
+    frame.margin_left = Inches(margin_in)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_right = Inches(margin_in)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_top = Inches(0)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_bottom = Inches(0)  # pyright: ignore[reportAttributeAccessIssue]
+
+
+@beartype
 def add_text(
     slide: Slide,
     left: float,
@@ -162,10 +178,7 @@ def add_text(
     box = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
     frame = box.text_frame
     frame.word_wrap = True
-    frame.margin_left = 0
-    frame.margin_right = 0
-    frame.margin_top = 0
-    frame.margin_bottom = 0
+    set_font_margins(frame, 0.0)
     frame.vertical_anchor = MSO_ANCHOR.TOP
     paragraph = frame.paragraphs[0]
     paragraph.alignment = align
@@ -188,10 +201,7 @@ def add_paragraphs(slide: Slide, left: float, top: float, width: float, height: 
     box = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
     frame = box.text_frame
     frame.word_wrap = True
-    frame.margin_left = 0
-    frame.margin_right = 0
-    frame.margin_top = 0
-    frame.margin_bottom = 0
+    set_font_margins(frame, 0.0)
     for index, item in enumerate(items):
         paragraph = frame.paragraphs[0] if index == 0 else frame.add_paragraph()
         paragraph.line_spacing = 1.08
@@ -255,8 +265,7 @@ def player_height(count: int, scale: float) -> float:
 
 @beartype
 def blank_slide(prs: PresentationType) -> Slide:
-    slide = cast(Slide, prs.slides.add_slide(prs.slide_layouts[6]))
-    return slide
+    return cast(Slide, prs.slides.add_slide(prs.slide_layouts[6]))
 
 
 @beartype
@@ -373,13 +382,13 @@ def draw_table(slide: Slide, block: sc.Table, left: float, top: float, width: fl
         table.rows[r].height = Inches(body_h)
 
     size = SIZE_TABLE * scale
-    for column, text in enumerate(headers):
-        set_cell(table.cell(0, column), text, size - 1.5, MUTED, bold=True, fill=PAPER)
+    for column, header in enumerate(headers):
+        set_cell(table, 0, column, header, size - 1.5, MUTED, bold=True, fill=PAPER)
     for r, row in enumerate(rows, start=1):
         for column, text in enumerate(row):
             bold = column == 0
             color = NAVY if column == 0 else TEXT
-            set_cell(table.cell(r, column), text, size, color, bold=bold, fill=WHITE)
+            set_cell(table, r, column, text, size, color, bold=bold, fill=WHITE)
 
     used = header_h + body_h * len(rows)
     if block.caption:
@@ -390,15 +399,16 @@ def draw_table(slide: Slide, block: sc.Table, left: float, top: float, width: fl
 
 
 @beartype
-def set_cell(cell: object, text: str, size: float, color: RGBColor, bold: bool,
-             fill: RGBColor) -> None:
+def set_cell(table: Table, row: int, column: int, text: str, size: float, color: RGBColor,
+             bold: bool, fill: RGBColor) -> None:
     """Style one table cell (python-pptx exposes no high-level helper for this)."""
-    frame = cell.text_frame  # type: ignore[attr-defined]
+    cell = table.cell(row, column)
+    frame = cell.text_frame
     frame.word_wrap = True
-    frame.margin_left = Inches(0.08)
-    frame.margin_right = Inches(0.06)
-    frame.margin_top = Inches(0.02)
-    frame.margin_bottom = Inches(0.02)
+    frame.margin_left = Inches(0.08)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_right = Inches(0.06)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_top = Inches(0.02)  # pyright: ignore[reportAttributeAccessIssue]
+    frame.margin_bottom = Inches(0.02)  # pyright: ignore[reportAttributeAccessIssue]
     paragraph = frame.paragraphs[0]
     paragraph.line_spacing = 1.0
     run = paragraph.add_run()
@@ -407,8 +417,8 @@ def set_cell(cell: object, text: str, size: float, color: RGBColor, bold: bool,
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = FONT
-    cell.fill.solid()  # type: ignore[attr-defined]
-    cell.fill.fore_color.rgb = fill  # type: ignore[attr-defined]
+    cell.fill.solid()  # type: ignore[no-untyped-call]
+    cell.fill.fore_color.rgb = fill
 
 
 @beartype
@@ -586,7 +596,7 @@ def main() -> None:
     prs = build()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(OUT))
-    slide_count = len(prs.slides._sldIdLst)  # noqa: SLF001 - python-pptx exposes no public count
+    slide_count = len(prs.slides._sldIdLst)  # pyright: ignore[reportPrivateUsage]
     print(f"wrote {OUT} ({OUT.stat().st_size / 1e6:.1f} MB, {slide_count} slides)")
 
 
