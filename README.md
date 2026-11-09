@@ -12,7 +12,7 @@ with a classical (non-neural) baseline comparison.
 | Venue | ICLR 2025 (Poster) |
 | OpenReview | [uxDFlPGRLX](https://openreview.net/forum?id=uxDFlPGRLX) |
 | Proceedings PDF | [proceedings.iclr.cc](https://proceedings.iclr.cc/paper_files/paper/2025/hash/3d937d5e40a883d5da9fd4aeeeb372b8-Abstract-Conference.html) |
-| arXiv | [2412.20156](https://arxiv.org/abs/2412.20156) |
+| arXiv | [2503.01485](https://arxiv.org/abs/2503.01485) |
 | Code | [facebookresearch/FlowDec](https://github.com/facebookresearch/FlowDec) |
 | Demo page | [sp-uhh.github.io/FlowDec](https://sp-uhh.github.io/FlowDec/) |
 

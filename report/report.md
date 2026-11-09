@@ -4,7 +4,7 @@
 **Paper:** *FlowDec: A flow-based full-band general audio codec with high perceptual quality*,
 Welker, Le, Chen, Hsu, Gerkmann, Richard, Wu — **ICLR 2025** (Poster), OpenReview
 [`uxDFlPGRLX`](https://openreview.net/forum?id=uxDFlPGRLX), arXiv
-[2412.20156](https://arxiv.org/abs/2412.20156).
+[2503.01485](https://arxiv.org/abs/2503.01485).
 
 Code: [facebookresearch/FlowDec](https://github.com/facebookresearch/FlowDec) (CC-BY-NC core).
 

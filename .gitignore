@@ -11,7 +11,6 @@ __pycache__/
 paper/checkpoints/
 paper/checkpoints.zip
 paper/*.pdf
-paper/flowdec.txt
 code/FlowDec/
 data/custom/raw/
 results/demo/

@@ -408,7 +408,7 @@ def build_slides() -> list[Slide]:
                 "**Paper:** *FlowDec: A flow-based full-band general audio codec with high perceptual "
                 "quality* — Welker, Le, Chen, Hsu, Gerkmann, Richard, Wu, **ICLR 2025** (Poster)."
             ),
-            Para("OpenReview `uxDFlPGRLX` · arXiv 2412.20156 · code: github.com/facebookresearch/FlowDec (CC-BY-NC core)."),
+            Para("OpenReview `uxDFlPGRLX` · arXiv 2503.01485 · code: github.com/facebookresearch/FlowDec (CC-BY-NC core)."),
             Picture(DIAGRAM_PNG, "FlowDec in one picture: a non-adversarial codec plus a conditional-flow-matching postfilter.", 1.0),
             Callout(
                 "Every number in this deck is produced by our own pipeline from the official checkpoints, "
