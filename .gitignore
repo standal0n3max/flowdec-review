@@ -23,5 +23,26 @@ results/*.log
 
 # copyrighted / course material (kept locally, not published)
 paper/*.txt
+paper/notes.md
 data/authors/
 Course project assignment AMLT 2026.pdf
+
+# Paper-selection drafts
+Audio ML Paper Scout.md
+Audio Research Paper Selection.md
+
+# Deck-build scripts (local only)
+scripts/slides_content.py
+scripts/build_slide_assets.py
+scripts/build_slides_html.py
+scripts/build_slides_pptx.py
+scripts/fill_report.py
+notebooks/flowdec_demo.html
+
+# Report: publish the submitted deck and the listening clips only
+report/*
+!report/AMLT_CP_flowdec.pdf
+!report/assets/
+report/assets/*
+!report/assets/audio/
+!report/assets/audio/**
